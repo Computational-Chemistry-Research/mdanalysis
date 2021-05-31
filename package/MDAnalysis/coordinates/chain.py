@@ -577,11 +577,18 @@ class ChainReader(base.ProtoReader):
         i, f = self._get_local_frame(frame)
         # seek to (1) reader i and (2) frame f in trajectory i
         self.__activate_reader(i)
+
+        # We undo previous transformations by storing and restoring the
+        # original Timestep
         if isinstance(self.active_reader, base.SingleFrameReaderBase):
-            # Undoes any transformations
-            self.active_reader.rewind()
+            try:
+                self.active_reader.ts = self.active_reader._orig_ts.copy()
+            except AttributeError:
+                self.active_reader._orig_ts = self.active_reader.ts.copy()
+
         # We rely on reader to implement __getitem__().
         self.ts = self.active_reader[f]
+
         self.__current_frame = self.ts.frame = frame
         return self.ts
 
