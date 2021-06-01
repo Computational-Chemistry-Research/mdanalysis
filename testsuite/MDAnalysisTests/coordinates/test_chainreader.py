@@ -173,7 +173,7 @@ class TestChainReader(object):
         assert_almost_equal(transformed.trajectory.ts.positions, ref, decimal = 6)
 
     def test_transform_ts_consistency(self, universe):
-        """Check that Reader.ts holds the ts being transformed (Isue 3343)"""
+        """Check that Reader.ts holds the ts being transformed (Issue 3343)"""
 
         class SomeTransformation(TransformationBase):
             def __init__(self, u):
